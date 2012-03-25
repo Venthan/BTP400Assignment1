@@ -1,5 +1,9 @@
 /*
  * Created by JFormDesigner on Mon Apr 21 12:50:34 EDT 2008
+ * Edited by Team 2 
+ ** Suventhan Krishnamoorthy (016225080)
+ ** Aayush Dhamala
+ ** Nan Zhou
  */
 
 package Provider.GoogleMapsStatic.TestUI;
@@ -208,14 +212,16 @@ private SwingUIHookAdapter _initHook(SwingUIHookAdapter hook) {
 
   return hook;
 }
-
+//Suventhan's Code
 private void _displayImgInFrame() {
 	
+	//remove everything thats in mapPanel
 	mapPanel.removeAll();
+	//repaint the img
 	mapPanel.repaint();
-	
+	//create a label and insert the img
 	JLabel imgLbl=new JLabel(new ImageIcon(_img));
-	
+	//add the label to the mapPanel
 	mapPanel.add(imgLbl);
 	
 }
@@ -448,6 +454,7 @@ private void initComponents() {
   			panel1.add(ttfZoom, new TableLayoutConstraints(3, 2, 3, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		}
   		contentPanel.add(panel1, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		//Suventhan's Code
   		{
   			
   			panelsuv.setOpaque(false);
@@ -470,7 +477,16 @@ private void initComponents() {
   			  			
   			
   			panelsuv.add(pickComboBox, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-
+  			
+  			//=========Label======
+  					//Aayush's Code
+  			jlblStatus= new JLabel("Click to save the map");  
+  			jlblStatus.setForeground(Color.red);
+  			jlblStatus.setHorizontalAlignment(SwingConstants.CENTER);
+  			//jlblStatus.setEditable( false );
+  			
+  			panelsuv.add(jlblStatus, new TableLayoutConstraints(7, 0, 7, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  					//Aayush's code ended
   			//========OK==========
   			
   			okButton.setText("OK");
@@ -480,12 +496,12 @@ private void initComponents() {
   			okButton.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e) {
 					
+			  			 
+
 				nameL = (String)pickComboBox.getSelectedItem();
 				if(nameL.equals("Toronto")==true){
 				
-				//	pickComboBox.getItemAt(0);
 				try {
-						//Toronto location
 						 ttfLat.setText("43.670906");
 					      ttfLon.setText("-79.393331");
 					    _task.execute();
@@ -499,7 +515,6 @@ private void initComponents() {
 					
 				
 				try {
-					//CN Tower location
 					 ttfLat.setText("43.643865");
 				      ttfLon.setText("-79.3885451");
 				    _task.execute();
@@ -513,7 +528,6 @@ private void initComponents() {
 					
 					
 					try {
-						//Ontario Museam location
 						 ttfLat.setText("43.667313");
 					      ttfLon.setText("-79.393636");
 					    _task.execute();
@@ -527,7 +541,6 @@ private void initComponents() {
 					
 					
 					try {
-						//Ontario Museam location
 						 ttfLat.setText("43.721802");
 					      ttfLon.setText("-79.342717");
 					    _task.execute();
@@ -541,7 +554,6 @@ private void initComponents() {
 						
 						
 						try {
-							//Ontario Museam location
 							 ttfLat.setText("43.770390");
 						      ttfLon.setText("-79.500750");
 						    _task.execute();
@@ -555,7 +567,6 @@ private void initComponents() {
 						
 						
 						try {
-							//Ontario Museam location
 							ttfLat.setText("43.794544");
 						      ttfLon.setText("-79.346623");
 						    _task.execute();
@@ -569,7 +580,6 @@ private void initComponents() {
 						
 						
 						try {
-							//Ontario Museam location
 							ttfLat.setText("45.536482");
 						      ttfLon.setText("-73.592702");
 						    _task.execute();
@@ -583,7 +593,6 @@ private void initComponents() {
 							
 							
 							try {
-								//Ontario Museam location
 								ttfLat.setText("49.253976");
 							      ttfLon.setText("-123.108091");
 							    _task.execute();
@@ -597,7 +606,6 @@ private void initComponents() {
 							
 							
 							try {
-								//Ontario Museam location
 								ttfLat.setText("42.980791");
 							      ttfLon.setText("-81.246983");
 							    _task.execute();
@@ -611,7 +619,6 @@ private void initComponents() {
 								
 								
 								try {
-									//Ontario Museam location
 									ttfLat.setText("45.393348");
 								      ttfLon.setText("-75.695610");
 								    _task.execute();
@@ -625,7 +632,6 @@ private void initComponents() {
 								
 								
 								try {
-									//Ontario Museam location
 									ttfLat.setText("43.839232");
 								      ttfLon.setText("-79.534436");
 								    _task.execute();
@@ -639,7 +645,6 @@ private void initComponents() {
 									
 									
 									try {
-										//Ontario Museam location
 										ttfLat.setText("43.097288");
 									      ttfLon.setText("-79.095321");
 									    _task.execute();
@@ -649,11 +654,14 @@ private void initComponents() {
 									  }
 									
 									}
+				
 					//
 					}
   			});
   			panelsuv.add(okButton, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			//Suventhan's code ended
   			
+  				//Aayush's Code
   			//========SAVE==========
   			
   			saveButton.setText("SAVE");
@@ -665,15 +673,7 @@ private void initComponents() {
 				
   			});
   			panelsuv.add(saveButton, new TableLayoutConstraints(8, 0, 8, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  			
-  			//=========Label======
-  			
-  			jlblStatus= new JLabel("Want to save the map?"); 
-  			jlblStatus.setForeground(Color.red);
-  			jlblStatus.setHorizontalAlignment(SwingConstants.CENTER);
-  			//jlblStatus.setEditable( false );
-  			
-  			panelsuv.add(jlblStatus, new TableLayoutConstraints(7, 0, 7, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  				//Aayush's Code
   			
   		}
   		contentPane2.add(panelsuv, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
@@ -760,8 +760,6 @@ private void initComponents() {
   	dialogPane.add(contentPane2, BorderLayout.NORTH);
   }
   contentPane.add(dialogPane, BorderLayout.CENTER);
-  Toolkit tk = Toolkit.getDefaultToolkit();
-  Dimension dim = tk.getScreenSize();
   setSize(1275, 685);
   setLocationRelativeTo(null);
   // JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -814,6 +812,7 @@ private JLabel lblProgressStatus;
 private JLabel jlblStatus;
 // JFormDesigner - End of variables declaration  //GEN-END:variables
 
+	//Aayush's Code
 private void save(){
 	if(jFileChooser1.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
 		save(jFileChooser1.getSelectedFile());
@@ -835,6 +834,7 @@ private void save(File file) {
        // jlblStatus.setText("Error saving " + file.getName());
       }
     }
+	//Aayush's code ended
  }
 
 
