@@ -2,11 +2,12 @@
  * Created by JFormDesigner on Mon Apr 21 12:50:34 EDT 2008
  * Edited by Team 2 
  ** Suventhan Krishnamoorthy (016225080)
- ** Aayush Dhamala
- ** Nan Zhou
+ ** Aayush Dhamala (045079068)
+ ** Nan Zhou (058459100)
  */
 
 package Provider.GoogleMapsStatic.TestUI;
+
 
 import Provider.GoogleMapsStatic.*;
 import Task.*;
@@ -19,6 +20,7 @@ import info.clearthought.layout.*;
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.*;
 
+
 import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -27,9 +29,14 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.beans.*;
 import java.text.*;
+import java.util.ArrayList;
 import java.util.concurrent.*;
 import java.awt.BorderLayout;
 import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.awt.image.BufferedImage;
 
 /** @author nazmul idris */
 public class SampleApp extends JFrame {
@@ -56,6 +63,7 @@ private JFileChooser jFileChooser1 = new JFileChooser(new File("."));
 
 public static void main(String[] args) {
   Utils.createInEDT(SampleApp.class);
+  
 }
 
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -96,8 +104,7 @@ private void _setupTask() {
       // set the license key
       MapLookup.setLicenseKey(ttfLicense.getText());
       
-     // ttfLat.setText("43.643865");
-     // ttfLon.setText("-79.388545");
+     
       // get the uri for the static map
       String uri = MapLookup.getMap(Double.parseDouble(ttfLat.getText()),
                                     Double.parseDouble(ttfLon.getText()),
@@ -213,6 +220,9 @@ private SwingUIHookAdapter _initHook(SwingUIHookAdapter hook) {
   return hook;
 }
 //Suventhan's Code
+/*
+ * Removing the popup window and recreating the img to a different location
+ */
 private void _displayImgInFrame() {
 	
 	//remove everything thats in mapPanel
@@ -223,6 +233,7 @@ private void _displayImgInFrame() {
 	JLabel imgLbl=new JLabel(new ImageIcon(_img));
 	//add the label to the mapPanel
 	mapPanel.add(imgLbl);
+	
 	
 }
 
@@ -295,10 +306,14 @@ private void initComponents() {
   dialogPane = new JPanel();
   contentPanel = new JPanel();
   contentPane2 = new JPanel();
+  contentPane3 = new JTextArea();
   contentPaneM = new JPanel();
+  newD = new JPanel();
   panel1 = new JPanel();
   panelsuv = new JPanel();
+  panelsouth = new JTextArea();
   panelMap = new JPanel();
+  centerPanelC = new JPanel();
   label2 = new JLabel();
   ttfSizeW = new JTextField();
   label4 = new JLabel();
@@ -314,6 +329,10 @@ private void initComponents() {
   btnGetCnTowerMap = new JButton();
   okButton = new JButton();
   saveButton = new JButton();
+  centerPanel = new JButton();
+  centerPaneld = new JButton();
+  centerPanell = new JButton();
+  centerPanelr = new JButton();
   pickComboBox = new JComboBox();
   label3 = new JLabel();
   ttfSizeH = new JTextField();
@@ -334,10 +353,11 @@ private void initComponents() {
   progressBar = new JProgressBar();
   lblProgressStatus = new JLabel();
   jlblStatus = new JLabel();
+  saveinput = new JFileChooser();
 
   //======== this ========
   setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-  setTitle("Google Static Maps-Edited by Team 2");
+  setTitle("Google Static Maps-Edited by Team 2(Suventhan,Aayush & Nan)");
   setIconImage(null);
   Container contentPane = getContentPane();
   contentPane.setLayout(new BorderLayout());
@@ -455,6 +475,9 @@ private void initComponents() {
   		}
   		contentPanel.add(panel1, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		//Suventhan's Code
+  		/*
+  		 * Creating the north panel to hold checkbox, checkbox and labels
+  		 */
   		{
   			
   			panelsuv.setOpaque(false);
@@ -468,6 +491,7 @@ private void initComponents() {
   			((TableLayout)panelsuv.getLayout()).setVGap(5);
   		
   			//==========ComboBox=======
+  				// Setting up the ComboBox 
   			pickComboBox = new JComboBox(cities);
   			pickComboBox.setEditable( false );
   			pickComboBox.setMaximumRowCount( 5 );
@@ -475,33 +499,38 @@ private void initComponents() {
   			pickComboBox.insertItemAt( "SELECT A LOCATION", 0 );  
   			pickComboBox.setSelectedIndex( 0 );
   			  			
-  			
+  			//adding the combobox to the north panel
   			panelsuv.add(pickComboBox, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   			
   			//=========Label======
   					//Aayush's Code
+  						//a Jlabel indicating when the save button is
   			jlblStatus= new JLabel("Click to save the map");  
   			jlblStatus.setForeground(Color.red);
   			jlblStatus.setHorizontalAlignment(SwingConstants.CENTER);
-  			//jlblStatus.setEditable( false );
+  			
   			
   			panelsuv.add(jlblStatus, new TableLayoutConstraints(7, 0, 7, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   					//Aayush's code ended
+  			//Suventhan's code
   			//========OK==========
-  			
+  				//Creating a OK button to connect a actionlistener to it
   			okButton.setText("OK");
   			okButton.setHorizontalAlignment(SwingConstants.CENTER);
   		
-  			//actionlistener for each selections
+  			//actionlistener for the OK button
   			okButton.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e) {
 					
 			  			 
-
+						// Getting the string from the combobox
 				nameL = (String)pickComboBox.getSelectedItem();
+				//checking which option the user has selected
 				if(nameL.equals("Toronto")==true){
 				
+					//writing the location manually to each destination and check for errors if it happens   
 				try {
+					
 						 ttfLat.setText("43.670906");
 					      ttfLon.setText("-79.393331");
 					    _task.execute();
@@ -663,22 +692,70 @@ private void initComponents() {
   			
   				//Aayush's Code
   			//========SAVE==========
-  			
+  				//Creating a save button that allows user to save the image
   			saveButton.setText("SAVE");
   			saveButton.setHorizontalAlignment(SwingConstants.CENTER);
+  				//acionlistener for the save button
   			saveButton.addActionListener(new ActionListener(){
 				public void actionPerformed(ActionEvent e) {
-					save();
+					//Create an image
+					BufferedImage bi= _img;
+					//setting the file name as location.png
+					 File outputfile=new File(nameL+ ".png");
+					 //connecting the File to a JFileChooser and get the selected file
+				      saveinput.setSelectedFile(outputfile);
+				      //Return value if approve is chosen
+					if(saveinput.showSaveDialog(dialogPane) == JFileChooser.APPROVE_OPTION){
+						//showing the location.png in the save name, in case the user doesn't want to type themself
+						outputfile=saveinput.getSelectedFile();
+					try {
+						//writing the image as location.png
+						ImageIO.write(bi, "png", outputfile);
 					}
+					//catch any error that may happen
+					catch(IOException ex){
+						
+					}
+
+					       // jlblStatus.setText("Error");
+					     
+					      
+					}
+				}
+					
 				
   			});
+				
   			panelsuv.add(saveButton, new TableLayoutConstraints(8, 0, 8, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  				//Aayush's Code
+  				
   			
   		}
   		contentPane2.add(panelsuv, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		//======SOUTH PANEL=====
+  		/*
+  		 * Creating a Instruction JTextArea to allow user to understand the GUI and what it does better
+  		 */
+  		{
+  			contentPane3.setBorder(new CompoundBorder(new TitledBorder("Instruction"), Borders.DLU7_BORDER));
+  			contentPane3.setEditable(false);
+  			contentPane3.setForeground(Color.BLUE);
+  			contentPane3.append("WELCOME TO THE TEAM 2 EDITED GOOGLE STATIC MAP"+"\n"+"\n");
+  			contentPane3.append("Option 1: Use the ComboBox and select a location"+"\n");
+  			contentPane3.append("         - If you wish to save the map, click the save button on the top right corner"+"\n");
+  			contentPane3.append("         - Click the move up or move down button to move around the map"+"\n");
+  			contentPane3.append("         - Note: The image file's extension will be saved as .png "+"\n");
+  			contentPane3.append("Option 2: Configure the inputs to Google Static Maps"+"\n");
+  			contentPane3.append("         - Enter the latitude and longitude of the location you desire"+"\n");
+
+  			
+  		}
+  		//Aayush's Code's ended
   		
+  		//Suventhan's code
   		//-----side map panel-----
+  		/*
+  		 * Creating a Jpanel to display the map on the same screen
+  		 */
   		{
   	  		mapPanel=new JPanel();
   	  		mapPanel.setOpaque(false);
@@ -686,8 +763,150 @@ private void initComponents() {
   	  		mapPanel.setLayout(new BorderLayout());
   		}
   	  		contentPaneM.add(mapPanel, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
-  		
-  		
+  	  		//Suventhan's code ended
+  	  		//Nan's code
+  	  		/*
+  	  		 * Creating UP,DOWN,LEFT & RIGHT button that will move the map according to the user selections
+  	  		 */
+  	  		{
+  	  		newD.setOpaque(false);
+  	    	newD.setLayout(new BorderLayout());
+  	    	newD.setSize(80, 100);
+  	    	/*
+  	  		newD.setLayout(new TableLayout(new double[][] {
+  	  				{0.15, 0.15, TableLayout.FILL},
+  	  				{TableLayout.PREFERRED, TableLayout.PREFERRED, TableLayout.PREFERRED}}));
+  	  				*/
+  	  			centerPanel.setText("Move UP");
+  	  			centerPanel.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e) {
+					/*
+					 * get the value of ttflat and ttflon. convert them into double and reenter the value to get a new coordination
+					 * so that it can recreate a map which is little up from the orginal map
+					 */
+					//String declaration
+					double newlat;
+					double newlon;
+					//converting the string to double
+					newlat=Double.parseDouble(ttfLat.getText());
+					newlon=Double.parseDouble(ttfLon.getText());
+					//add values according to the directions
+					newlat = newlat+0.005;
+					newlon = newlon-0.005;
+					
+					try {
+						//convering double to string and passing it to ttflat
+					ttfLat.setText(Double.toString(newlat));
+				      ttfLon.setText(Double.toString(newlon));
+				    _task.execute();
+				}
+				  catch (TaskException e1) {
+				    sout(e1.getMessage());
+				  }
+
+					}
+				
+  			});
+  	  		
+  	  	centerPaneld.setText("Move DOWN");
+
+  	  	//Actionlistener for the move down button
+  	  centerPaneld.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				
+				double newlat;
+				double newlon;
+				newlat=Double.parseDouble(ttfLat.getText());
+				newlon=Double.parseDouble(ttfLon.getText());
+				newlat = newlat-0.005;
+				newlon = newlon-0.005;
+				
+				try {
+				ttfLat.setText(Double.toString(newlat));
+			      ttfLon.setText(Double.toString(newlon));
+			    _task.execute();
+			}
+			  catch (TaskException e1) {
+			    sout(e1.getMessage());
+			  }
+
+				}
+			
+		});
+  	centerPanell.setText("LEFT");
+		centerPanell.addActionListener(new ActionListener(){
+	public void actionPerformed(ActionEvent e) {
+		/*
+		 * get the value of ttflat and ttflon. convert them into double and reenter the value to get a new coordination
+		 * so that it can recreate a map which is little up from the orginal map
+		 */
+		//String declaration
+		double newlat;
+		double newlon;
+		//converting the string to double
+		newlat=Double.parseDouble(ttfLat.getText());
+		newlon=Double.parseDouble(ttfLon.getText());
+		//add values according to the directions
+		newlat = newlat;
+		newlon = newlon-0.010;
+		
+		try {
+			//convering double to string and passing it to ttflat
+		ttfLat.setText(Double.toString(newlat));
+	      ttfLon.setText(Double.toString(newlon));
+	    _task.execute();
+	}
+	  catch (TaskException e1) {
+	    sout(e1.getMessage());
+	  }
+
+		}
+	
+	});
+		centerPanelr.setText("RIGHT");
+			centerPanelr.addActionListener(new ActionListener(){
+		public void actionPerformed(ActionEvent e) {
+			/*
+			 * get the value of ttflat and ttflon. convert them into double and reenter the value to get a new coordination
+			 * so that it can recreate a map which is little up from the orginal map
+			 */
+			//String declaration
+			double newlat;
+			double newlon;
+			//converting the string to double
+			newlat=Double.parseDouble(ttfLat.getText());
+			newlon=Double.parseDouble(ttfLon.getText());
+			//add values according to the directions
+			newlat = newlat;
+			newlon = newlon+0.010;
+			
+			try {
+				//convering double to string and passing it to ttflat
+			ttfLat.setText(Double.toString(newlat));
+		      ttfLon.setText(Double.toString(newlon));
+		    _task.execute();
+		}
+		  catch (TaskException e1) {
+		    sout(e1.getMessage());
+		  }
+
+			}
+		
+		});
+    	
+
+
+  	  		}
+  	  		//postion the button in a borderlayout
+  	  	newD.add(centerPanel, BorderLayout.NORTH);
+    	newD.add(centerPaneld, BorderLayout.SOUTH);
+    	newD.add(centerPanell, BorderLayout.WEST);
+    	newD.add(centerPanelr, BorderLayout.EAST);
+
+
+  	  		
+  	  		//Nan's code ended
+  	  		//Suventhan's code 
   		
   		
   		//======== scrollPane1 ========
@@ -758,6 +977,8 @@ private void initComponents() {
   	dialogPane.add(contentPaneM, BorderLayout.WEST);
   	dialogPane.add(contentPanel, BorderLayout.EAST);
   	dialogPane.add(contentPane2, BorderLayout.NORTH);
+  	dialogPane.add(contentPane3, BorderLayout.SOUTH);
+  	dialogPane.add(newD, BorderLayout.CENTER);
   }
   contentPane.add(dialogPane, BorderLayout.CENTER);
   setSize(1275, 685);
@@ -772,8 +993,12 @@ private JPanel mapPanel;
 private JPanel contentPanel;
 private JPanel contentPane2;
 private JPanel contentPaneM;
+private JPanel newD;
+private JTextArea contentPane3;
+private JPanel centerPanelC;
 private JPanel panel1;
 private JPanel panelsuv;
+private JTextArea panelsouth;
 private JPanel panelMap;
 private JLabel label2;
 private JTextField ttfSizeW;
@@ -790,6 +1015,10 @@ private JButton btnGetGizaPMap;
 private JButton btnGetCnTowerMap;
 private JButton okButton;
 private JButton saveButton;
+private JButton centerPanel;
+private JButton centerPaneld;
+private JButton centerPanell;
+private JButton centerPanelr;
 private JComboBox pickComboBox;
 private JLabel label3;
 private JTextField ttfSizeH;
@@ -810,31 +1039,10 @@ private JTextField ttfProgressMsg;
 private JProgressBar progressBar;
 private JLabel lblProgressStatus;
 private JLabel jlblStatus;
+private JFileChooser saveinput;
 // JFormDesigner - End of variables declaration  //GEN-END:variables
 
-	//Aayush's Code
-private void save(){
-	if(jFileChooser1.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
-		save(jFileChooser1.getSelectedFile());
-		}
-	}
-private void save(File file) {
-      try {
-        // Write the text in jta to the specified file
-        BufferedOutputStream out = new BufferedOutputStream(
-         new FileOutputStream(file));
-     // byte[] b = (jta.getText()).getBytes();
-       // out.write(b, 0, b.length);
-       out.close();
-  
-        // Display the status of the save file operation in jlblStatus
-       // jlblStatus.setText(file.getName() + " Saved ");
-     }
-      catch (IOException ex) {
-       // jlblStatus.setText("Error saving " + file.getName());
-      }
-    }
-	//Aayush's code ended
+	
  }
 
 
