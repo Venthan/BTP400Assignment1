@@ -3,3 +3,23 @@ BTP400 Assigment1 by Team 2(Suventhan Krishnamoorthy,Aayush Dhamala & Nan Zhou)
 Submission Requirements for Assignment 1
 
 After creating the JAR files, I've imported the JAR files into Eclipse again. I've checked that there's no compilation error. I will lose 50% if that's not the case.
+
+-----HOW TO RUN THIS (On Eclipse)----
+
+1.Create a java project
+
+2.Right-Click on the src folder and select import
+
+3.Select Archive File under General folder and click next
+
+4.Click Browse and located the "Team2Assignment" file and click finish
+
+5.Now to add the library, right-click on the java project ->Build Path ->Add External Archives
+
+6.Located the lib folder that contains all the jar files
+
+7.Select all the .jar files and open
+    Note:All the jar files can be found at http://developerlife.com/tutorials/wp-content/uploads/geoip_service.zip by downloading the source code
+	- This should add all the jar files in Referenced libraries
+	
+8. open SampleApp.java and run it
